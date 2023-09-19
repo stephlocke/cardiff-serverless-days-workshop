@@ -1,7 +1,7 @@
 <template>
   <section class="todoapp">
     <header class="header">
-      <h1>todos</h1>
+      <h1>{{ apiResponse }}</h1>
       <h2 v-if="isLoading">Loading...</h2>     
       <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo"
         @keyup.enter="addTodo" />
@@ -84,10 +84,27 @@ export default {
       visibility: "all",
       isLoading: false,
       userId: null,
-      userDetails: null
+      userDetails: null,
+      apiResponse: ""
     };
   },
-
+  created() {
+    fetch(`/api/helloworld?name=${this.userDetails}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/text",
+      },
+    })
+      .then((res) => {
+        return res.text();
+      })
+      .then((res) => {
+        this.apiResponse = res; // Update the apiResponse property with the API response
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
   mounted() {
     var visibility = window.location.hash.replace(/#\/?/, "");
     if (filters[visibility]) {
