@@ -89,21 +89,7 @@ export default {
     };
   },
   created() {
-    fetch(`/api/helloworld?name=${this.userDetails}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/text",
-      },
-    })
-      .then((res) => {
-        return res.text();
-      })
-      .then((res) => {
-        this.apiResponse = res; // Update the apiResponse property with the API response
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+   this.helloWorld('world');
   },
   mounted() {
     var visibility = window.location.hash.replace(/#\/?/, "");
@@ -145,6 +131,14 @@ export default {
       }       
       if (newValue == false) {
         this.$Progress.finish();
+      } 
+    },
+    userDetails(newValue) {
+      if (newValue == true) {
+        this.helloWorld(newValue);    
+      }       
+      if (newValue == false) {
+        this.helloWorld(userDetails);
       } 
     }
   },
@@ -291,7 +285,25 @@ export default {
         return term + 's';
       else
         return term;
-    }
+    },
+
+    helloWorld: function(user) {
+      fetch(`/api/helloworld?name=${user}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/text",
+        },
+      })
+        .then((res) => {
+          return res.text();
+        })
+        .then((res) => {
+          this.apiResponse = res;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
 
   directives: {
