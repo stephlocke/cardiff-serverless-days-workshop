@@ -8,13 +8,15 @@
     </header>
     <section class="main" v-show="todos.length">
       <ul class="todo-list">        
-        <li v-for="todo in filteredTodos" class="todo" :key="todo.id" :class="{ completed: todo.completed, editing: todo == editedTodo }" 
+        <li v-for="todo in filteredTodos" class="todo" :key="todo.id" :class="{inprogress: todo.inprogress, completed: todo.completed, editing: todo == editedTodo }" 
           draggable="true" @dragstart="dragStart($event, todo)" @drop="dragDrop($event, todo)" @dragenter="dragEnter($event)" @dragleave="dragLeave($event)" @dragover.prevent>
           <div class="view">
             <input @change="completeTodo(todo)" class="toggle" type="checkbox" v-model="todo.completed" />
             <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
             <button class="destroy" @click="removeTodo(todo)"></button>
           </div>
+          <input id="inprogcheck" @change="inprogressTodo(todo)"  class="inprogtoggle" type="checkbox" v-model="todo.inprogress"  /> 
+            <label class="inprogicon"> &#9202 </label>
           <input class="edit" type="text" v-model="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo)"
             @keyup.enter="doneEdit(todo)" @keyup.esc="cancelEdit(todo)" />
         </li>
@@ -34,6 +36,10 @@
         <li>
           <a href="#/completed" @click="visibility = 'completed'"
             :class="{ selected: visibility == 'completed' }">Completed</a>
+        </li>
+        <li>
+          <a href="#/inprogress" @click="visibility = 'inprogress'"
+            :class="{ selected: visibility == 'inprogress' }">In Progress</a>
         </li>
       </ul>
       <button class="clear-completed" @click="removeCompleted" v-show="completedTodos.length > 0">
@@ -59,7 +65,10 @@ var filters = {
   },
   completed: function (todos) {
     return todos.filter(todo => { return todo.completed; });
-  }
+  },
+  inprogress: function (todos) {
+  return todos.filter(todo => { return todo.inprogress; });
+}
 };
 
 export default {
@@ -107,6 +116,8 @@ export default {
     completedTodos: function () { return filters["completed"](this.todos) },
 
     filteredTodos: function () { return (filters[this.visibility](this.todos)).sort(t => t.order); },
+    
+    inprogressTodos: function () { return filters["inprogress"](this.todos) },
   },
 
   watch: {
@@ -205,7 +216,13 @@ export default {
         body: JSON.stringify({ completed: todo.completed, order: todo.order })
       });
     },
-
+    inprogressTodo: function (todo) {
+      fetch(API + `/id/${todo.id}`, {
+        headers: HEADERS,
+        method: "PATCH",
+        body: JSON.stringify({ inprogress: todo.inprogress, order: todo.order })
+      });
+    },
     removeTodo: function (todo) {
       fetch(API + `/id/${todo.id}`, {
         headers: HEADERS,
