@@ -5,10 +5,12 @@ on:
   push:
     branches:
       - main
+      - inprogress
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+      - inprogress
 
 jobs:
   build_and_deploy_job:
