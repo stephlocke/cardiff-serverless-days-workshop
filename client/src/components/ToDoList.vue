@@ -120,7 +120,7 @@ fetch(
    return res.text()
  })
  .then(res => {
-   const {helloworld} = res;
+   const helloworld = res;
  });
     
     this.getTodos();
