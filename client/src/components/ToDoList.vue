@@ -109,7 +109,7 @@ export default {
 
 // call /api/helloworld with the name parameter using userDetails
 fetch(
- `/api/helloworld?name=${this.userDetails}`,
+ `/api/helloworld?name=yo`,
  {
    method: "GET",
    headers: {
