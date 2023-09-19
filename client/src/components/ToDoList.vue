@@ -89,7 +89,7 @@ export default {
     };
   },
   created() {
-   this.helloWorld('world');
+   this.apiResponse = this.helloWorld('you');
   },
   mounted() {
     var visibility = window.location.hash.replace(/#\/?/, "");
@@ -133,14 +133,6 @@ export default {
         this.$Progress.finish();
       } 
     },
-    userDetails(newValue) {
-      if (newValue == true) {
-        this.helloWorld(newValue);    
-      }       
-      if (newValue == false) {
-        this.helloWorld(userDetails);
-      } 
-    }
   },
 
   methods: {
