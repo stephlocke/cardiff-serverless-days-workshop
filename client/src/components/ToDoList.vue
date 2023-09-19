@@ -1,7 +1,7 @@
 <template>
   <section class="todoapp">
     <header class="header">
-      <h1>todos</h1>
+      <h1>{{  helloworld }}</h1>
       <h2 v-if="isLoading">Loading...</h2>     
       <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo"
         @keyup.enter="addTodo" />
@@ -106,6 +106,22 @@ export default {
         this.userDetails = clientPrincipal?.userDetails;
         this.userId = clientPrincipal?.userId;
       });
+
+// call /api/helloworld with the name parameter using userDetails
+fetch(
+ `/api/helloworld?name=${this.userDetails}`,
+ {
+   method: "GET",
+   headers: {
+     "Content-Type": "application/text"
+   }
+ }     )
+ .then(res => {
+   return res.text()
+ })
+ .then(res => {
+   const {helloworld} = res;
+ });
     
     this.getTodos();
   },
